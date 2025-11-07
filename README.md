@@ -6,7 +6,7 @@ Spring Boot with CRaC and Solace Demo
 
 ## Build and running
 
-build: `mvn clean package`
+build: `mvn clean package` or `mvn clean package -DskipTests`
 
 run: `java -XX:CRaCCheckpointTo=checkpoint -jar target/spring-boot-crac-solace-0.0.1-SNAPSHOT.jar`
 

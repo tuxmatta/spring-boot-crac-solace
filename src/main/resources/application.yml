@@ -1,0 +1,40 @@
+solace:
+  java:
+    host: ${SOLACE_JCSMP_HOST}
+    msgVpn: ${SOLACE_MESSAGE_VPN}
+    client-name: client-${random.uuid}
+    connectRetries: 5
+    reconnectRetries: 3
+    connectRetriesPerHost: 2
+    reconnectRetryWaitInMillis: 3000
+    apiProperties:
+      SUB_ACK_WINDOW_SIZE: 255
+      PUB_ACK_WINDOW_SIZE: 255
+      AUTHENTICATION_SCHEME: AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE
+      SSL_CLIENT_CERT: ${SOLACE_CLIENT_CERT}
+      SSL_PRIVATE_KEY: ${SOLACE_PRIVATE_KEY}
+
+
+spring:
+  cloud:
+    function:
+      definition: "consumer"
+    stream:
+      default:
+        consumer:
+          max-attempts: 4
+          back-off-initial-interval: 1000
+          back-off-max-interval: 10000
+          back-off-multiplier: 2
+          default-retryable: true
+
+      bindings:
+        consumer-in-0:
+          contentType: application/json
+          destination: random/topic
+
+      binders:
+        solace-broker:
+          type: solace
+          default-candidate: true
+
