@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  crac-demo:
+    image: crac-test
+    network_mode: host
+    restart: no
+    volumes:
+      - ./checkpoint/:/checkpoint
+    cap_add:
+      - CHECKPOINT_RESTORE
+      - SYS_PTRACE
+    environment:
+      SOLACE_JCSMP_HOST: yourHost
+      SOLACE_MESSAGE_VPN: yourVPN
+      SOLACE_CLIENT_CERT: yourClientCert
+      SOLACE_PRIVATE_KEY: yourPrivateKeyForClientCert
+    command:
+      - java
+      - -XX:CRaCCheckpointTo=/checkpoint/cr
+      - -XX:+UnlockDiagnosticVMOptions
+      - -XX:+CRaCPrintResourcesOnCheckpoint
+      - -Djdk.crac.collect-fd-stacktraces=true
+      - -jar
+      - spring-boot-crac-solace-0.0.1-SNAPSHOT.jar
+
